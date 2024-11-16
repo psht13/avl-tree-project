@@ -1,0 +1,25 @@
+{
+  "name": "avl-tree-project",
+  "version": "1.0.0",
+  "description": "Implementation and Optimization of an AVL Tree in the Node.js Environment for Use in Search Systems: Algorithmic Approach and Practical Application.",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node main.js",
+    "lint": "eslint .",
+    "test": "npm run lint && node test/all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psht13/avl-tree-project.git"
+  },
+  "author": "Pavlo Yurchenko <pashtet.gm@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psht13/avl-tree-project/issues"
+  },
+  "homepage": "https://github.com/psht13/avl-tree-project#readme",
+  "devDependencies": {
+    "eslint": "^8.12.0"
+  }
+}
