@@ -2,10 +2,10 @@
   "name": "avl-tree-project",
   "version": "1.0.0",
   "description": "Implementation and Optimization of an AVL Tree in the Node.js Environment.",
-  "main": "main.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node main.js",
+    "start": "node index.js",
     "lint": "eslint .",
     "test": "npm run lint && node test/all"
   },
