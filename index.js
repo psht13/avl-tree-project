@@ -1,183 +1,46 @@
-class AVLTreeNode {
-  constructor(value) {
-    this.value = value; // Value of the node
-    this.leftChild = null; // Left child
-    this.rightChild = null; // Right child
-    this.nodeHeight = 1; // Height of the node, initialized to 1 (leaf node)
-  }
-}
+import AVLTree from './lib/avl-tree.js';
 
-class AVLTree {
-  constructor() {
-    this.treeRoot = null; // Root of the tree
-  }
+// Create an instance of the AVL tree
+const avl = new AVLTree();
 
-  // Helper method to get the height of a node
-  getNodeHeight(treeNode) {
-    return treeNode ? treeNode.nodeHeight : 0;
-  }
+// Example: Adding values to the AVL tree
+avl.add(50);
+avl.add(70);
+avl.add(20);
+avl.add(40);
+avl.add(60);
+avl.add(80);
+console.log('Tree after adding values:');
+console.log('In-order Traversal:', avl.inOrder());
 
-  // Helper method to calculate the balance factor of a node
-  calculateBalanceFactor(treeNode) {
-    if (!treeNode) return 0;
-    return (
-      this.getNodeHeight(treeNode.leftChild) -
-      this.getNodeHeight(treeNode.rightChild)
-    );
-  }
+// Example: Searching for a value
+const searchValue = 40;
+const foundNode = avl.search(searchValue);
+console.log(`Searching for ${searchValue}:`, foundNode ? 'Found' : 'Not Found');
 
-  // Right rotation for balancing (LL imbalance)
-  performRightRotation(unbalancedNode) {
-    const newRoot = unbalancedNode.leftChild;
-    const subtree = newRoot.rightChild;
+// Example: Getting the minimum and maximum values
+console.log('Minimum value in the tree:', avl.getMin());
+console.log('Maximum value in the tree:', avl.getMax());
 
-    // Perform rotation
-    newRoot.rightChild = unbalancedNode;
-    unbalancedNode.leftChild = subtree;
+// Example: Deleting a value from the tree
+avl.remove(20);
+console.log('Tree after removing 30:');
+console.log('In-order Traversal:', avl.inOrder());
 
-    // Update heights
-    unbalancedNode.nodeHeight =
-      Math.max(
-        this.getNodeHeight(unbalancedNode.leftChild),
-        this.getNodeHeight(unbalancedNode.rightChild),
-      ) + 1;
-    newRoot.nodeHeight =
-      Math.max(
-        this.getNodeHeight(newRoot.leftChild),
-        this.getNodeHeight(newRoot.rightChild),
-      ) + 1;
+// Example: Checking if the tree is balanced
+console.log('Is the tree balanced?', avl.isBalanced());
 
-    // Return new root
-    return newRoot;
-  }
+// Example: Getting the height of the tree
+console.log('Height of the tree:', avl.getTreeHeight());
 
-  // Left rotation for balancing (RR imbalance)
-  performLeftRotation(unbalancedNode) {
-    const newRoot = unbalancedNode.rightChild;
-    const subtree = newRoot.leftChild;
+// Example: Getting the size of the tree
+console.log('Size of the tree (total nodes):', avl.getSize());
 
-    // Perform rotation
-    newRoot.leftChild = unbalancedNode;
-    unbalancedNode.rightChild = subtree;
+// Example: In-order traversal (sorted order)
+console.log('In-order Traversal:', avl.inOrder());
 
-    // Update heights
-    unbalancedNode.nodeHeight =
-      Math.max(
-        this.getNodeHeight(unbalancedNode.leftChild),
-        this.getNodeHeight(unbalancedNode.rightChild),
-      ) + 1;
-    newRoot.nodeHeight =
-      Math.max(
-        this.getNodeHeight(newRoot.leftChild),
-        this.getNodeHeight(newRoot.rightChild),
-      ) + 1;
+// Example: Pre-order traversal
+console.log('Pre-order Traversal:', avl.preOrder());
 
-    // Return new root
-    return newRoot;
-  }
-
-  // Insert a value into the AVL tree
-  insertIntoTree(currentNode, newValue) {
-    // Step 1: Perform normal BST insertion
-    if (!currentNode) return new AVLTreeNode(newValue);
-    if (newValue < currentNode.value) {
-      currentNode.leftChild = this.insertIntoTree(
-        currentNode.leftChild,
-        newValue,
-      );
-    } else if (newValue > currentNode.value) {
-      currentNode.rightChild = this.insertIntoTree(
-        currentNode.rightChild,
-        newValue,
-      );
-    } else {
-      throw new Error('Duplicate values are not allowed in AVL tree.');
-    }
-
-    // Step 2: Update the height of the current node
-    currentNode.nodeHeight =
-      Math.max(
-        this.getNodeHeight(currentNode.leftChild),
-        this.getNodeHeight(currentNode.rightChild),
-      ) + 1;
-
-    // Step 3: Get the balance factor to check if the node is unbalanced
-    const balanceFactor = this.calculateBalanceFactor(currentNode);
-
-    // Step 4: Perform rotations to balance the tree
-    // LL imbalance
-    if (balanceFactor > 1 && newValue < currentNode.leftChild.value) {
-      return this.performRightRotation(currentNode);
-    }
-
-    // RR imbalance
-    if (balanceFactor < -1 && newValue > currentNode.rightChild.value) {
-      return this.performLeftRotation(currentNode);
-    }
-
-    // LR imbalance
-    if (balanceFactor > 1 && newValue > currentNode.leftChild.value) {
-      currentNode.leftChild = this.performLeftRotation(currentNode.leftChild);
-      return this.performRightRotation(currentNode);
-    }
-
-    // RL imbalance
-    if (balanceFactor < -1 && newValue < currentNode.rightChild.value) {
-      currentNode.rightChild = this.performRightRotation(
-        currentNode.rightChild,
-      );
-      return this.performLeftRotation(currentNode);
-    }
-
-    // Return the unchanged node pointer
-    return currentNode;
-  }
-
-  // Wrapper method to insert a value into the AVL tree
-  addValue(value) {
-    this.treeRoot = this.insertIntoTree(this.treeRoot, value);
-  }
-
-  // In-order traversal (sorted order)
-  traverseInOrder(treeNode = this.treeRoot, result = []) {
-    if (treeNode) {
-      this.traverseInOrder(treeNode.leftChild, result);
-      result.push(treeNode.value);
-      this.traverseInOrder(treeNode.rightChild, result);
-    }
-    return result;
-  }
-
-  // Pre-order traversal
-  traversePreOrder(treeNode = this.treeRoot, result = []) {
-    if (treeNode) {
-      result.push(treeNode.value);
-      this.traversePreOrder(treeNode.leftChild, result);
-      this.traversePreOrder(treeNode.rightChild, result);
-    }
-    return result;
-  }
-
-  // Post-order traversal
-  traversePostOrder(treeNode = this.treeRoot, result = []) {
-    if (treeNode) {
-      this.traversePostOrder(treeNode.leftChild, result);
-      this.traversePostOrder(treeNode.rightChild, result);
-      result.push(treeNode.value);
-    }
-    return result;
-  }
-}
-
-// Usage example
-const balancedTree = new AVLTree();
-balancedTree.addValue(10);
-balancedTree.addValue(20);
-balancedTree.addValue(30);
-balancedTree.addValue(40);
-balancedTree.addValue(50);
-balancedTree.addValue(25);
-
-console.log('In-order Traversal:', balancedTree.traverseInOrder());
-console.log('Pre-order Traversal:', balancedTree.traversePreOrder());
-console.log('Post-order Traversal:', balancedTree.traversePostOrder());
+// Example: Post-order traversal
+console.log('Post-order Traversal:', avl.postOrder());
