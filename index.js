@@ -24,7 +24,7 @@ console.log('Maximum value in the tree:', avl.getMax());
 
 // Example: Deleting a value from the tree
 avl.remove(20);
-console.log('Tree after removing 30:');
+console.log('Tree after removing 20:');
 console.log('In-order Traversal:', avl.inOrder());
 
 // Example: Checking if the tree is balanced
