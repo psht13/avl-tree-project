@@ -44,3 +44,5 @@ console.log('Pre-order Traversal:', avl.preOrder());
 
 // Example: Post-order traversal
 console.log('Post-order Traversal:', avl.postOrder());
+
+export default AVLTree;
