@@ -1,6 +1,6 @@
 {
   "name": "avl-tree-project",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Implementation and Optimization of an AVL Tree in the Node.js Environment.",
   "main": "index.js",
   "type": "module",

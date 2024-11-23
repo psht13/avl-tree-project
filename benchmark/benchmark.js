@@ -45,17 +45,66 @@ function testSet(data) {
   data.forEach(num => set.delete(num)); // Remove elements
 }
 
+// Test JavaScript's Map for comparison
+function testMap(data) {
+  const map = new Map();
+  data.forEach(num => map.set(num, true)); // Insert elements
+  data.forEach(num => map.has(num)); // Search for elements
+  data.forEach(num => map.delete(num)); // Remove elements
+}
+
+// Function to compare search speed only
+function searchBenchmark(name, data, searchFn) {
+  const start = performance.now();
+  searchFn();
+  const end = performance.now();
+  console.log(`${name} Search: ${(end - start).toFixed(3)} ms`);
+}
+
+// Test search speed for pre-filled structures
+function testSearchSpeed(data) {
+  const avl = new AVLTree();
+  const array = [];
+  const set = new Set();
+  const map = new Map();
+
+  // Fill all data structures
+  data.forEach(num => avl.add(num));
+  data.forEach(num => array.push(num));
+  data.forEach(num => set.add(num));
+  data.forEach(num => map.set(num, true));
+
+  // Benchmark search for all elements
+  searchBenchmark('AVL Tree', data, () => {
+    data.forEach(num => avl.search(num));
+  });
+  searchBenchmark('Array (Linear Search)', data, () => {
+    data.forEach(num => array.includes(num));
+  });
+  searchBenchmark('Set', data, () => {
+    data.forEach(num => set.has(num));
+  });
+  searchBenchmark('Map', data, () => {
+    data.forEach(num => map.has(num));
+  });
+}
+
 // Main benchmark function
 function main() {
   const dataSize = 100000; // Number of elements to test with
-  const data = generateUniqueArray(100000); // Generates 10,000 unique values
+  const data = generateUniqueArray(dataSize); // Generates unique values
 
   console.log(`Benchmark with ${dataSize} elements:`);
 
-  benchmark('AVL Tree', () => testAVLTree(data)); // Benchmark AVL Tree
-  // Benchmark Array with linear search
+  // Full operation benchmarks
+  benchmark('AVL Tree', () => testAVLTree(data));
   benchmark('Array (Linear Search)', () => testArray(data));
-  benchmark('Set', () => testSet(data)); // Benchmark Set
+  benchmark('Set', () => testSet(data));
+  benchmark('Map', () => testMap(data));
+
+  console.log('\nSearch speed comparison for pre-filled structures:');
+  testSearchSpeed(data); // Search speed only
+  console.log('\n');
 }
 
 main();
